@@ -5,6 +5,7 @@ langchain-openai
 langchain-mistralai
 langchain-google-genai
 langchain-huggingface
+langchain-chroma
 chromadb
 sentence-transformers
 pypdf

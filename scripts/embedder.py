@@ -11,7 +11,6 @@ def run_ingestion(source_file,persist_directory):
     """
     if not os.path.exists(source_file):
         raise FileNotFoundError(f"Error: The source file '{source_file}' was not found. Embedding process is aborted.")
-    
 
     print(f"---Starting Embedding Process for {source_file} ---")
 
@@ -51,8 +50,8 @@ def run_ingestion(source_file,persist_directory):
         raise RuntimeError(f"Error during embedding process: {str(e)}")
 
 if __name__ == "__main__":
-    source_file = ""
-    persist_directory = ""
+    source_file = "data/document_a_embeder.pdf"
+    persist_directory = "data/chroma_db"
     run_ingestion(source_file,persist_directory)
 
 
