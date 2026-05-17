@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  # service to creat the BDD
+  ingest:
+    build: .
+    container_name: rag_ingest
+    volumes:
+      - .:/app
+    command: python scripts/embedder.py
+
+  web_app:
+    build: .
+    container_name: rag_stream_app
+    ports:
+      - "8501:8501"
+    volumes:
+      - .:/app
+    #command: streamlit run app.py
+    
