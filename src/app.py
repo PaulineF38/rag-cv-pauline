@@ -11,10 +11,9 @@ st.set_page_config(page_title="Pauline - Interactive CV", page_icon="💼", layo
 
 # ----disclaimer----
 st.warning(
-    "⚠️ **Disclaimer:** This project is not intended to replace my traditional CV, "
-    "but rather to demonstrate the technical skills acquired during my work-study program "
-    "and training. Please note that this assistant relies on a Large Language Model (LLM), "
-    "meaning it may generate inaccuracies."
+    "**Note:** The very first query might take a few seconds to respond. "
+    "This is normal, as the application is initializing the vector database "
+    "and loading the AI embedding models into memory."
 )
 
 st.title("RAG chatbot - The iteractive CV")
@@ -32,11 +31,17 @@ st.sidebar.info(
     "**Security:** Your API key is processed solely within your browser session "
     "and is never saved or stored on any server."
 )
+st.sidebar.warning(
+    "⚠️ **Disclaimer:** This project is not intended to replace my traditional CV, "
+    "but rather to demonstrate the technical skills acquired during my work-study program "
+    "and training. Please note that this assistant relies on a Large Language Model (LLM), "
+    "meaning it may generate inaccuracies."
+)
 
 # ---- Chat part ----
 
 # save history
-if "mssages" not in st.session_state:
+if "messages" not in st.session_state:
     st.session_state.messages = []
 
 for msg in st.session_state.messages:
@@ -50,17 +55,17 @@ if user_query := st.chat_input("e.g., What are her Python and Data Science skill
     if not api_key:
         st.error("Please enter your API key in the sidebar to activate the chatbot.")
     else:
-        # 1. Display user message and append to history
+        # Display user message and append to history
         with st.chat_message("user"):
             st.markdown(user_query)
         st.session_state.messages.append({"role": "user", "content": user_query})
 
-        # 2. Generate assistant response using the RAG core engine
+        # Generate assistant response using the RAG core engine
         with st.chat_message("assistant"):
             with st.spinner("The assistant is searching the CV..."):
-                # Call our modular RAG engine
-                response = query_rag(user_query, provider, api_key)
-                st.markdown(response)
+                # Call RAG engine
+                response_generator = query_rag(user_query, provider, api_key)
+                response = st.write_stream(response_generator)
                 
-        # 3. Append assistant response to history
+        # Append assistant response to history
         st.session_state.messages.append({"role": "assistant", "content": response})

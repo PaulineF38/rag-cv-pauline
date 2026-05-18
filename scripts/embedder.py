@@ -28,15 +28,14 @@ def run_ingestion(source_file,persist_directory):
 
         # split in chunks
         text_splitter = RecursiveCharacterTextSplitter(
-            chunk_size = 800,
-            chunk_overlap = 100
+            chunk_size = 1200,
+            chunk_overlap = 250,
         )
 
         chunks = text_splitter.split_documents(documents)
 
-        # lightweight model (MiniLM) ==> runs fast on CPU + free
-        embeddings = HuggingFaceEmbeddings(model_name = "sentence-transformers/all-MiniLM-L6-v2")
-
+        # BAAI/bge-m3 model ==> very good for french sementic + free
+        embeddings = HuggingFaceEmbeddings(model_name = "BAAI/bge-m3")
         # create DB
         Chroma.from_documents(
             documents = chunks,
